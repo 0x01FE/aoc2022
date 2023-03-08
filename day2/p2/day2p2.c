@@ -1,51 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main()
+{
 
-    FILE *textfile;
-    char line[6];
-    int totalScore = 0;
+    FILE *File;
+    char Line[6];
 
-    textfile = fopen("input.txt", "r");
+    int TotalScore = 0;
 
-    while (fgets(line, 6, textfile) != NULL) {
-        int score = 0;
-        char me = line[2];
-        char opp = line[0];
+    File = fopen("input.txt", "r");
+
+    while (fgets(Line, 6, File) != NULL)
+    {
+
+        int Score = 0;
+
+        char Me = Line[2];
+        char Opponent = Line[0];
         
-        if (me == 'X') { // Lose
-            if (opp == 'A') { // O: Rock, Y: Scissors 
-                score+=3;
-            } else if (opp == 'B') { // O: Paper, Y: Rock
-                score+=1; 
-            } else if (opp == 'C') { // O: Scissors, Y: Paper
-                score+=2;
-            }
-        } else if (me == 'Y') { // Draw 
-            score+=3;
-            if (opp == 'A') { // O: Rock, Y: Rock
-                score+=1;
-            } else if (opp == 'B') { // O: Paper, Y: Paper
-                score+=2; 
-            } else if (opp == 'C') { // O: Scissors, Y: Scissors
-                score+=3;
-            }
-        } else if (me == 'Z') { // Win
-            score+=6;
-            if (opp == 'A') { // O: Rock, Y: Paper
-                score+=2;
-            } else if (opp == 'B') { // O: Paper, Y: Scissors
-                score+=3; 
-            } else if (opp == 'C') { // O: Scissors, Y: Rock
-                score+=1;
-            }
+        if (Me == 'X')  // Lose
+        {
+            // O: Rock, Y: Scissors
+            if (Opponent == 'A')
+                Score += 3;
+
+            // O: Paper, Y: Rock
+            else if (Opponent == 'B')
+                Score += 1;
+
+            // O: Scissors, Y: Paper
+            else if (Opponent == 'C')
+                Score += 2;
+
         }
-        totalScore+=score;
+        else if (Me == 'Y') // Draw
+        {
+
+            Score += 3;
+
+            // O: Rock, Y: Rock
+            if (Opponent == 'A')
+                Score += 1;
+
+            // O: Paper, Y: Paper
+            else if (Opponent == 'B')
+                Score += 2;
+
+            // O: Scissors, Y: Scissors
+            else if (Opponent == 'C')
+                Score += 3;
+
+        }
+        else if (Me == 'Z') // Win
+        {
+
+            Score+=6;
+
+            // O: Rock, Y: Paper
+            if (Opponent == 'A')
+                Score += 2;
+
+            // O: Paper, Y: Scissors
+            else if (Opponent == 'B')
+                Score += 3;
+
+            // O: Scissors, Y: Rock
+            else if (Opponent == 'C')
+                Score += 1;
+
+        }
+
+        TotalScore += Score;
     }
     
-    printf("Total score was %d\n",totalScore);
-    fclose(textfile);
+
+    printf("Total score was %d\n",TotalScore);
+
+    fclose(File);
 
     return 0;
-}   
+}
