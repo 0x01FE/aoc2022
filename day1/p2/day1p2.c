@@ -3,63 +3,78 @@
 #include <stdbool.h>
 
 
-int findSmallest(int array[3]) {
+int FindSmallest(int Array[3])
+{
 
-    int smallestNumberPosition = 0;
-    int smallestNumber = array[0];
+    int SmallestNumberPosition = 0;
+    int SmallestNumber = Array[0];
 
-    for (int i = 1; i < 3; i++) {
+    for (int i = 1; i < 3; i++)
+    {
 
-        if (array[i] < smallestNumber) {
-            smallestNumber = array[i];
-            smallestNumberPosition = i;
+        if (Array[i] < SmallestNumber)
+        {
+            SmallestNumber = Array[i];
+            SmallestNumberPosition = i;
         }
+
     }
 
-    return smallestNumberPosition;
+    return SmallestNumberPosition;
 }
 
 
-int main() {
+int main()
+{
 
-    FILE  *textfile;
-    char *line = malloc(256);
+    FILE  *File;
+    char *Line = malloc(256);
 
-    int topThree[3] = {0,0,0};
-    int currentCal;
+    int TopThree[3] = {0,0,0};
+    int CurrentCal = 0;
 
-    currentCal = 0;
     
-    textfile = fopen("input.txt","r");
+    File = fopen("input.txt","r");
     
-    while(fgets(line, 10, textfile)) {
+    while(fgets(Line, 10, File))
+    {
 
-        if (atoi(line) == 0) {
+        if (atoi(Line) == 0)
+        {
 
-            for (int i=0; i < 3; i++) {
+            for (int i=0; i < 3; i++)
+            {
 
-                bool zeroCheck = false;
+                bool ZeroCheck = false;
 
-                if (currentCal > topThree[i]) {
-                    int smallestPos = findSmallest(topThree);
-                    topThree[smallestPos] = currentCal;
+                if (CurrentCal > TopThree[i])
+                {
+                    int SmallestPos = FindSmallest(TopThree);
+                    TopThree[SmallestPos] = CurrentCal;
                     break;
                 }
+
             }
 
-            currentCal = 0;
-        } else {
-            currentCal +=  atoi(line);
+            CurrentCal = 0;
+
         }
+        else
+            CurrentCal +=  atoi(Line);
+
     }
     
-    int total = 0;
-    for (int i=0;i<3;i++) {
-        total+=topThree[i];
-    }
-    printf("Total of the top three elves: %d\n",total);
+    int Total = 0;
 
-    fclose(textfile);
+
+    for (int i = 0; i < 3; i++)
+        Total += TopThree[i];
+
+
+    printf("Total of the top three elves: %d\n", Total);
+
+    fclose(File);
     
     return 0;
+
 }

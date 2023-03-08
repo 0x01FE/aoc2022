@@ -2,42 +2,42 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main() {
+int main()
+{
 
-    FILE  *textfile;
-    char *line = malloc(256);
+    FILE  *File;
+    char *Line = malloc(256);
 
+    int CurrentCal, MaxCalories, ElfNum, ElfLargest = 0;
     
-    int currentCal, maxCalories, elfNum, elfLargest;
-
-    currentCal, maxCalories, elfNum, elfLargest = 0;
-    
-    
-
-
-    
-    textfile = fopen("input.txt","r");
+    File = fopen("input.txt","r");
     
 
-    while(fgets(line, 10, textfile)) {
-        if (atoi(line) == 0) {
-            if (currentCal > maxCalories) {
-                maxCalories = currentCal;
-                elfLargest = elfNum;
+    while(fgets(Line, 10, File))
+    {
+
+        if (atoi(Line) == 0)
+        {
+
+            if (CurrentCal > MaxCalories)
+            {
+                MaxCalories = CurrentCal;
+                ElfLargest = ElfNum;
             }
-            currentCal = 0;
-            elfNum++;
-        } else {
-            currentCal +=  atoi(line);
- 
+
+            CurrentCal = 0;
+            ElfNum++;
+
         }
+        else
+            CurrentCal +=  atoi(Line);
+ 
         
     }
-    printf("Elf %d is carrying %d calories of food.", elfLargest, maxCalories);
-    
 
-    fclose(textfile);
+    printf("Elf %d is carrying %d calories of food.", ElfLargest, MaxCalories);
     
-
+    fclose(File);
+    
     return 0;
 }
