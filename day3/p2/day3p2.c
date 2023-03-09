@@ -4,25 +4,33 @@
 
 
 
-int CountLines(FILE *File)
+int CountLines(char *FileName)
 {
     char *Line = malloc(256);
     int LineCount = 0;
+
+    FILE *File;
+    File = fopen(FileName, "r");
 
     while (fgets(Line, 256, File) != NULL)
     {
         LineCount++;
     }
 
+    fclose(File);
+
     return LineCount;
 }
 
 
-void GetLine(FILE *File, int LineNumber, char* Line)
+void GetLine(char *FileName, int LineNumber, char* Line)
 {
     int CurrentLineNumber = 1;
 
-    while (fgets(Line, sizeof Line, File) != NULL)
+    FILE *File;
+    File = fopen(FileName, "r");
+
+    while (fgets(Line, 256, File) != NULL)
     {
 
         if (CurrentLineNumber == LineNumber)
@@ -33,13 +41,15 @@ void GetLine(FILE *File, int LineNumber, char* Line)
 
     }
 
+    fclose(File);
+
 }
 
 
 int main()
 {
 
-    FILE *File;
+    char FileName[] = "input.txt";
 
     int Total = 0;
     int Priority = 0;
@@ -48,8 +58,7 @@ int main()
     int CurrentGroup = 1;
 
 
-    File = fopen("test.txt", "r");
-    int LineCount = CountLines(File);
+    int LineCount = CountLines(FileName);
 
     while (CurrentLine <= LineCount)
     {
@@ -60,10 +69,9 @@ int main()
         char *Member2 = malloc(256);
         char *Member3 = malloc(256);
 
-        GetLine(File, CurrentLine, Member1);
-        GetLine(File, CurrentLine + 1, Member2);
-        GetLine(File, CurrentLine + 2, Member3);
-
+        GetLine(FileName, CurrentLine, Member1);
+        GetLine(FileName, CurrentLine + 1, Member2);
+        GetLine(FileName, CurrentLine + 2, Member3);
 
         for (int a = 0; a < strlen(Member1); a++)
         {
@@ -122,8 +130,6 @@ int main()
     }
 
     printf("Total Group Item Priority: %d\n", Total);
-
-    fclose(File);
 
     return 0;
 }
