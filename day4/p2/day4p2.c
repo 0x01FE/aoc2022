@@ -4,13 +4,22 @@
 #include <stdbool.h>
 
 
-bool IntRangeInIntRange(int a, int b, int c, int d)
+bool Overlap(int Ranges[4])
 {
-    if (c <= a && d >= b)
-        return true;
 
-    else
-        return false;
+    for (int x = Ranges[0]; x <= Ranges[1]; x++)
+    {
+        for (int y = Ranges[2]; y <= Ranges[3]; y++)
+        {
+            if (x == y)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+
 }
 
 
@@ -78,7 +87,6 @@ int main()
 
         }
 
-
         printf("Elf Pair Ranges: ");
         for (int i = 0; i < (sizeof ElfRanges / sizeof (ElfRanges[0])); i++)
         {
@@ -88,15 +96,12 @@ int main()
         printf("\n\n");
 
 
-        if (IntRangeInIntRange(ElfRanges[0], ElfRanges[1], ElfRanges[2], ElfRanges[3]) || IntRangeInIntRange(ElfRanges[2], ElfRanges[3], ElfRanges[0], ElfRanges[1]))
+        if (Overlap(ElfRanges))
             Total++;
 
     }
 
-    printf("Total Pairs Fully Contained in Other: %d\n", Total);
+    printf("Total Overlaps: %d\n", Total);
 
     fclose(File);
-
-    return 0;
-
 }
