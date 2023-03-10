@@ -1,4 +1,5 @@
-# aoc2022
-my advent of code 2022
+# AOC2022
+My Advent of Code 2022
 
-done in c
+All done in C.
+My goals with this were to write readible code that worked with varying inputs.
