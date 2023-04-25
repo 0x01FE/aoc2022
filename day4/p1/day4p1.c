@@ -32,11 +32,13 @@ int main()
     for (int i = 0;i < 2; i++)
         Elves[i] = malloc(256);
 
+    int ElfRanges[4];
 
     while(fgets(Line, 256, File) != NULL)
     {
 
-        int ElfRanges[4] = {0, 0, 0, 0};
+        for (int i = 0; i < 4; i++)
+            ElfRanges[i] = 0;
 
 
         // Splits the line by the comma in the middle of the line to get each elf's range
@@ -63,7 +65,7 @@ int main()
             while (Task != NULL)
             {
 
-                for (int i = 0; i < (sizeof ElfRanges / sizeof (ElfRanges[0])); i++)
+                for (int i = 0; i < 4; i++)
                 {
                     if (ElfRanges[i] == 0)
                     {
@@ -80,7 +82,7 @@ int main()
 
 
         printf("Elf Pair Ranges: ");
-        for (int i = 0; i < (sizeof ElfRanges / sizeof (ElfRanges[0])); i++)
+        for (int i = 0; i < 4; i++)
         {
             printf("%d ", ElfRanges[i]);
         }
