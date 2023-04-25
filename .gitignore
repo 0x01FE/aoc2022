@@ -1,2 +1,4 @@
 *.exe
+/day5/p1/getline.c
+/day5/p1/strinttest.c*.exe
 .vscode
