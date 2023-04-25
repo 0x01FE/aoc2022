@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 
-bool IntRangeInIntRange(int a, int b, int c, int d)
+bool IntRangeInIntRange(int * a, int * b, int * c, int * d)
 {
     if (c <= a && d >= b)
         return true;
@@ -17,40 +17,33 @@ bool IntRangeInIntRange(int a, int b, int c, int d)
 int main()
 {
 
-    FILE *File;
+    FILE * File;
 
     File = fopen("input.text", "r");
 
 
-    char *Line = malloc(256);
+    char * Line = malloc(256);
 
     int Total = 0;
 
 
-    char *Elves[2];
+    char * Elves[2];
 
     for (int i = 0;i < 2; i++)
         Elves[i] = malloc(256);
 
-    int ElfRanges[4];
+    int * ElfRanges[4];
 
     while(fgets(Line, 256, File) != NULL)
     {
 
         for (int i = 0; i < 4; i++)
-            ElfRanges[i] = 0;
+            ElfRanges[i] = NULL;
 
 
         // Splits the line by the comma in the middle of the line to get each elf's range
         Elves[0] = strtok(Line, ",");
-
-
-        int i = 0;
-        while (Elves[i] != NULL)
-        {
-            i++;
-            Elves[i] = strtok(NULL, ",");
-        }
+        Elves[1] = strtok(NULL, ",");
 
 
         // Loop through both elves
@@ -67,9 +60,9 @@ int main()
 
                 for (int i = 0; i < 4; i++)
                 {
-                    if (ElfRanges[i] == 0)
+                    if (ElfRanges[i] == NULL)
                     {
-                        ElfRanges[i] = (int) strtol(Task, NULL, 10);
+                        ElfRanges[i] = (int *) strtol(Task, NULL, 10);
                         break;
                     }
                 }
