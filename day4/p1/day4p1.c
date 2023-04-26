@@ -27,10 +27,9 @@ int main()
     int Total = 0;
 
 
-    char * Elves[2];
+    char ** Elves;
 
-    for (int i = 0; i < 2; i++)
-        Elves[i] = malloc(256);
+    Elves = malloc(2);
 
     int * ElfRanges[4];
 
@@ -76,9 +75,8 @@ int main()
 
         printf("Elf Pair Ranges: ");
         for (int i = 0; i < 4; i++)
-        {
             printf("%d ", ElfRanges[i]);
-        }
+
 
         printf("\n\n");
 
