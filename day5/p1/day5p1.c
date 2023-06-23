@@ -4,6 +4,10 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+struct Node{
+    char Letter;
+    struct Node * Next;
+};
 
 
 void GetLine(char *FileName, int LineNumber, char* Line)
@@ -71,39 +75,68 @@ int main()
         Collumn Number Line - 1 should match the number of lines it took to get to
         the bottom of the drawing which we can then infer the max number of items in one stack with.
     */
-    char * Stacks[Collumns];
+    struct Node Stacks[Collumns];
 
-    for (int i = 0; i < Collumns; i ++)
+    for (int i = 0; i < Collumns; i++)
     {
-        Stacks[i] = malloc(Collumns);
+        Stacks[i].Letter = '0';
+        Stacks[i].Next = NULL;
     }
 
-
-    int CurrentCollumn = 1;
+    int CurrentCollumn = 0; // Actual Collumn Number is this +1
     int Place;
-    char * CollumnContent;
-    char Temp[1];
+    // char * CollumnContent;
+    char ContainerLetter;
 
-    while (CurrentCollumn <= Collumns)
+    while (CurrentCollumn < Collumns)
     {
-        GetLine(FileName, CurrentLine, Line);
-        Place = (CurrentCollumn * 2) - 1;
 
-        // Roundabout method for making that character a string
-        Temp[0] = Line[Place];
+        CurrentLine = CollumnNumberLine-1;
+        Place = (CurrentCollumn * 4) + 1;
+        while (CurrentLine > 0)
+        {
+            GetLine(FileName, CurrentLine, Line);
 
-        if (Stacks[CurrentCollumn] != NULL)
-            strcat(Stacks[CurrentCollumn], Temp);
+            ContainerLetter = Line[Place];
 
-        else
-            Stacks[CurrentCollumn] = Temp;
+            struct Node * p = &Stacks[CurrentCollumn];
+
+            while (p != NULL)
+            {
+                if (p->Letter == '0')
+                {
+                    printf("Setting stack %d node to %c", CurrentCollumn, ContainerLetter);
+                    p->Letter = ContainerLetter;
+                }
+                else
+                {
+                    struct Node TempNode;
+                    TempNode.Letter = ContainerLetter;
+
+                    p->Next = &TempNode;
+                }
+
+                p = p->Next;
+            }
+
+            CurrentLine--;
+        }
 
         CurrentCollumn++;
     }
 
 
+    for (int i = 0; i < Collumns; i++)
+    {
+        printf("Letters for Stack %d:\n", i);
+        struct Node * p = &Stacks[i];
 
-
+        while (p != NULL)
+        {
+            printf("%c\n", p->Letter);
+            p = p->Next;
+        }
+    }
 
 
 
