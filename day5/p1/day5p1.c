@@ -10,6 +10,7 @@ struct Node{
 };
 
 
+
 void GetLine(char *FileName, int LineNumber, char* Line)
 {
 
@@ -53,7 +54,7 @@ int main()
 
         GetLine(FileName, CurrentLine, Line);
 
-        printf(Line);
+        printf("%s", Line);
 
         if (isdigit(Line[1]))
         {
@@ -69,7 +70,7 @@ int main()
     printf("Collumn Number Line : %d\n", CollumnNumberLine);
 
     Collumns = strlen(Line) / 4;
-    printf("Collumns : %d\n", Collumns);
+    printf("Collumns : %d\n\n", Collumns);
 
     /*
         Collumn Number Line - 1 should match the number of lines it took to get to
@@ -83,6 +84,7 @@ int main()
         Stacks[i].Next = NULL;
     }
 
+
     int CurrentCollumn = 0; // Actual Collumn Number is this +1
     int Place;
     // char * CollumnContent;
@@ -90,37 +92,50 @@ int main()
 
     while (CurrentCollumn < Collumns)
     {
-
+        int NodeC = 1;
         CurrentLine = CollumnNumberLine-1;
         Place = (CurrentCollumn * 4) + 1;
+        printf("\nGoing to collumn %d\n", CurrentCollumn);
+        struct Node * Current = &Stacks[CurrentCollumn];
+
         while (CurrentLine > 0)
         {
             GetLine(FileName, CurrentLine, Line);
 
             ContainerLetter = Line[Place];
 
-            struct Node * p = &Stacks[CurrentCollumn];
-
-            while (p != NULL)
+            printf("p->Letter is %c!\n", Current->Letter);
+            while (Current != NULL)
             {
-                if (p->Letter == '0')
-                {
-                    printf("Setting stack %d node to %c", CurrentCollumn, ContainerLetter);
-                    p->Letter = ContainerLetter;
-                }
-                else
-                {
-                    struct Node TempNode;
-                    TempNode.Letter = ContainerLetter;
+                if (ContainerLetter == ' ')
+                    break;
 
-                    p->Next = &TempNode;
+                if (Current->Letter == '0')
+                {
+                    printf("Setting stack %d node %d from %c -> %c\n\n", CurrentCollumn, NodeC, Current->Letter, ContainerLetter);
+                    Current->Letter = ContainerLetter;
+                }
+                else if (Current->Letter != ContainerLetter)
+                {
+                    struct Node * TempNode = malloc(sizeof(char) + sizeof(void *));
+                    printf("Setting stack %d node %d from NULL -> %c\n\n", CurrentCollumn, NodeC, ContainerLetter);
+                    TempNode->Letter = ContainerLetter;
+                    TempNode->Next = NULL;
+
+                    printf("p is %p\n", Current);
+                    Current->Next = TempNode;
+                    printf("Next is %p\n", Current->Next);
                 }
 
-                p = p->Next;
+                Current = Current->Next;
+                printf("p is %p\n", Current);
+
             }
 
+            NodeC++;
             CurrentLine--;
         }
+
 
         CurrentCollumn++;
     }
