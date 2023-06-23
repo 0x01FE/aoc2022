@@ -96,13 +96,14 @@ int main()
         CurrentLine = CollumnNumberLine-1;
         Place = (CurrentCollumn * 4) + 1;
         printf("\nGoing to collumn %d\n", CurrentCollumn);
-        struct Node * Current = &Stacks[CurrentCollumn];
 
         while (CurrentLine > 0)
         {
             GetLine(FileName, CurrentLine, Line);
 
             ContainerLetter = Line[Place];
+
+            struct Node * Current = &Stacks[CurrentCollumn];
 
             printf("p->Letter is %c!\n", Current->Letter);
             while (Current != NULL)
