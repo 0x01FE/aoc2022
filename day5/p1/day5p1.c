@@ -40,7 +40,7 @@ void GetLine(char *FileName, int LineNumber, char* Line)
 int main()
 {
 
-    char FileName[] = "test.text";
+    char FileName[] = "input.text";
 
     int CollumnNumberLine;
 
@@ -92,10 +92,8 @@ int main()
 
     while (CurrentCollumn < Collumns)
     {
-        int NodeC = 1;
         CurrentLine = CollumnNumberLine-1;
         Place = (CurrentCollumn * 4) + 1;
-        printf("\nGoing to collumn %d\n", CurrentCollumn);
 
         while (CurrentLine > 0)
         {
@@ -105,35 +103,27 @@ int main()
 
             struct Node * Current = &Stacks[CurrentCollumn];
 
-            printf("p->Letter is %c!\n", Current->Letter);
-            while (Current != NULL)
+            while (Current->Next != NULL)
             {
-                if (ContainerLetter == ' ')
-                    break;
-
-                if (Current->Letter == '0')
-                {
-                    printf("Setting stack %d node %d from %c -> %c\n\n", CurrentCollumn, NodeC, Current->Letter, ContainerLetter);
-                    Current->Letter = ContainerLetter;
-                }
-                else if (Current->Letter != ContainerLetter)
-                {
-                    struct Node * TempNode = malloc(sizeof(char) + sizeof(void *));
-                    printf("Setting stack %d node %d from NULL -> %c\n\n", CurrentCollumn, NodeC, ContainerLetter);
-                    TempNode->Letter = ContainerLetter;
-                    TempNode->Next = NULL;
-
-                    printf("p is %p\n", Current);
-                    Current->Next = TempNode;
-                    printf("Next is %p\n", Current->Next);
-                }
-
                 Current = Current->Next;
-                printf("p is %p\n", Current);
-
             }
 
-            NodeC++;
+            if (ContainerLetter == ' ')
+                break;
+
+            if (Current->Letter == '0')
+            {
+                Current->Letter = ContainerLetter;
+            }
+            else if (Current->Letter != ContainerLetter)
+            {
+                struct Node * TempNode = malloc(sizeof(char) + sizeof(void *));
+                TempNode->Letter = ContainerLetter;
+                TempNode->Next = NULL;
+
+                Current->Next = TempNode;
+            }
+
             CurrentLine--;
         }
 
@@ -149,9 +139,10 @@ int main()
 
         while (p != NULL)
         {
-            printf("%c\n", p->Letter);
+            printf("%c", p->Letter);
             p = p->Next;
         }
+        printf("\n");
     }
 
 
