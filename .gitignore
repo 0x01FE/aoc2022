@@ -3,3 +3,4 @@
 /day5/p1/strinttest.c*.exe
 .vscode
 *.o
+*.out
