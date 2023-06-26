@@ -58,7 +58,7 @@ void GetLine(char *FileName, int LineNumber, char* Line)
 int main()
 {
 
-    char FileName[] = "test.text";
+    char FileName[] = "input.text";
 
     int CollumnNumberLine;
 
@@ -95,12 +95,15 @@ int main()
 
 
     // Parsing the starting positions
-    struct Node Stacks[Collumns];
+    struct Node * Stacks[Collumns];
 
     for (int i = 0; i < Collumns; i++)
     {
-        Stacks[i].Letter = '0';
-        Stacks[i].Next = NULL;
+        struct Node * TempNode = malloc(sizeof(char) + sizeof(void *));
+        TempNode->Letter = '0';
+        TempNode->Next = NULL;
+
+        Stacks[i] = TempNode;
     }
 
 
@@ -123,7 +126,7 @@ int main()
             if (ContainerLetter == ' ')
                 break;
 
-            struct Node * Current = &Stacks[CurrentCollumn];
+            struct Node * Current = Stacks[CurrentCollumn];
 
             while (Current->Next != NULL)
                 Current = Current->Next;
@@ -150,26 +153,13 @@ int main()
     }
 
 
-    for (int i = 0; i < Collumns; i++)
-    {
-        printf("Letters for Stack %d:\n", i);
-        struct Node * p = &Stacks[i];
-
-        while (p != NULL)
-        {
-            printf("%c", p->Letter);
-            p = p->Next;
-        }
-        printf("\n");
-    }
-
-
 
     // Parsing the movements
     CurrentLine = CollumnNumberLine + 2; // Line where movements start
 
     int Lines = CountLines(FileName);
 
+    // Move the crates
     while (CurrentLine <= Lines)
     {
         GetLine(FileName, CurrentLine, Line);
@@ -186,54 +176,98 @@ int main()
         while (Token != NULL)
         {
             if (CurrentToken == 1)
-            {
-                printf("Amount is %s\n", Token);
                 Number = atoi(Token);
-            }
-            else if (CurrentToken == 3)
-            {
-                printf("Source is %s\n", Token);
-                Src = atoi(Token) - 1;
-            }
-            else if (CurrentToken == 5)
-            {
-                printf("Destination is %s\n", Token);
-                Dest = atoi(Token) - 1;
-            }
 
+            else if (CurrentToken == 3)
+                Src = atoi(Token) - 1;
+
+            else if (CurrentToken == 5)
+                Dest = atoi(Token) - 1;
 
             Token = strtok(NULL, " ");
 
             CurrentToken++;
         }
 
-
         // Containers that are being moved
-        struct Node * TempContainers[Number];
+        char TempContainers[Number];
 
-        // Take x off of a
+        // Take x off of a and put into letters TempContainers
         for (int i = 0; i < Number; i++)
         {
-            struct Node * Current = &Stacks[Src];
+            struct Node * Current = Stacks[Src];
 
-            while (Current->Next != NULL)
+            while (Current != NULL)
             {
                 if (Current->Next == NULL)
                 {
-                    TempContainers[i] = Current->Next;
-                    Current->Next = NULL;
+                    TempContainers[i] = Current->Letter;
+                    Stacks[Src] = NULL;
+                    break;
                 }
+                else if (Current->Next->Next == NULL)
+                {
+                    TempContainers[i] = Current->Next->Letter;
+                    Current->Next = NULL;
+                    break;
+                }
+
                 Current = Current->Next;
             }
 
-            printf("%c\n", TempContainers[i]->Letter);
+        }
 
+        // Take the letters from TempContainers and put them in b
+        for (int i = 0; i < Number; i++)
+        {
+            struct Node * Current = Stacks[Dest];
+
+            while (1)
+            {
+                if (Current == NULL)
+                {
+                    struct Node * TempNode = malloc(sizeof(char) + sizeof(void *));
+                    TempNode->Letter = TempContainers[i];
+                    TempNode->Next = NULL;
+
+                    Stacks[Dest] = TempNode;
+                    break;
+                }
+                else if (Current->Next == NULL)
+                {
+                    struct Node * TempNode = malloc(sizeof(char) + sizeof(void *));
+                    TempNode->Letter = TempContainers[i];
+                    TempNode->Next = NULL;
+
+                    Current->Next = TempNode;
+                    break;
+                }
+
+                Current = Current->Next;
+            }
         }
 
         CurrentLine++;
     }
 
 
+    printf("\nTop containers of each stack: ");
+
+    for (int i = 0; i < Collumns; i++)
+    {
+        struct Node * Current = Stacks[i];
+
+        while (Current->Next != NULL)
+        {
+            Current = Current->Next;
+        }
+
+        printf("%c", Current->Letter);
+    }
+    printf("\n");
+
+
+    // Should print out the stacks with the top character CMZ
 
     return 0;
 
