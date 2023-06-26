@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-struct Node{
+struct Node {
     char Letter;
     struct Node * Next;
 };
