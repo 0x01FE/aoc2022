@@ -184,5 +184,5 @@ int main()
         CurrentLine++;
     }
 
-    PrintDir(CurrentDirectory);
+    // PrintDir(CurrentDirectory);
 }
