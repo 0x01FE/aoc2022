@@ -71,7 +71,6 @@ int main()
 
         GetLine(FileName, CurrentLine, Line);
 
-        printf("%s", Line);
 
         if (isdigit(Line[1]))
         {
@@ -84,10 +83,10 @@ int main()
     }
     while (Line != NULL);
 
-    printf("Collumn Number Line : %d\n", CollumnNumberLine);
+
 
     Collumns = strlen(Line) / 4;
-    printf("Collumns : %d\n\n", Collumns);
+
 
 
 

@@ -3,19 +3,44 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
 
+struct File {
+    char * Name;
+    int size;
+};
 
 struct Dir {
     char * Name;
-    int Size;
+    int size;
     struct Dir * Parent;
     int ChildrenAmount;
     struct Dir ** Children;
+    int FileCount;
+    struct File ** Files;
 };
 
+struct Dir * FindDir(struct Dir * CurrentDir, char * target_name)
+{
+    for (int index = 0; index < CurrentDir->ChildrenAmount; index++)
+    {
+        char * current_child_name = CurrentDir->Children[index]->Name;
+        if (strcmp(current_child_name, target_name) == 0)
+            return CurrentDir->Children[index];
+    }
+    return NULL;
+}
 
+char * RemoveLastChar(char * Str)
+{
+    size_t length = strlen(Str);
+    char * NewString = malloc(length * sizeof(char));
+    for (int index = 0; index < length - 1; index++)
+        NewString[index] = Str[index];
+    return NewString;
+}
 
-int CountLines(char *FileName)
+int CountLines(char * FileName)
 {
     char *Line = malloc(256);
     int LineCount = 0;
@@ -33,10 +58,7 @@ int CountLines(char *FileName)
     return LineCount;
 }
 
-
-
-
-void GetLine(char *FileName, int LineNumber, char* Line)
+void GetLine(char * FileName, int LineNumber, char * Line)
 {
 
     int CurrentLineNumber = 1;
@@ -65,6 +87,7 @@ void PrintDir(struct Dir * Current)
 {
     printf("Name: %s, ", Current->Name);
     printf("Children: %d, ", Current->ChildrenAmount);
+    printf("Size: %d, ", Current->size);
 
     if (Current->Parent)
         printf("Parent: %s",  Current->Parent->Name);
@@ -83,7 +106,10 @@ int main()
 {
     struct Dir Root;
     Root.Name = "Root";
+    Root.size = 0;
     Root.Parent = NULL;
+    Root.ChildrenAmount = 0;
+    Root.FileCount = 0;
     struct Dir * CurrentDirectory = &Root;
 
     char FileName[] = "test.text";
@@ -103,11 +129,13 @@ int main()
 
             while (Command != NULL)
             {
-                if (Command == "cd")
+                if (strcmp(Command, "cd") == 0)
                 {
-
+                    char * target_dir_name = strtok(NULL, " ");
+                    CurrentDirectory = FindDir(CurrentDirectory, target_dir_name);
+                    Command = strtok(NULL, " ");
                 }
-                else if (strcmp(Command, "ls\r\n") == 0)
+                else if (strcmp(Command, "ls\n") == 0)
                 {
                     // Find how many items we need to put into an array
                     int Directories = 0;
@@ -115,11 +143,11 @@ int main()
 
                     do
                     {
-                        if (Line[0] == '$')
-                            break;
-
                         printf("get line %d\n", CurrentLine+LineOffset);
                         GetLine(FileName, CurrentLine + LineOffset, Line);
+
+                        if (Line[0] == '$')
+                            break;
 
                         char * FirstWord = strtok(Line, " ");
 
@@ -127,7 +155,12 @@ int main()
                             Directories++;
 
                         else if (isdigit(Line[0]))
-                            CurrentDirectory->Size += atoi(FirstWord);
+                        {
+                            int add = atoi(FirstWord);
+                            printf("Adding size %d to %s\n", add, CurrentDirectory->Name);
+                            CurrentDirectory->size += add;
+                            printf("CurrentDirectory Size is %d\n", CurrentDirectory->size);
+                        }
 
                         LineOffset++;
                     }
@@ -135,8 +168,9 @@ int main()
 
                     printf("%d Directories found\n", Directories);
 
-                    CurrentLine += LineOffset;
+                    // CurrentLine += LineOffset;
 
+                    printf("Getting directories...\n");
                     if (Directories > 0)
                     {
                         LineOffset = 1;
@@ -148,24 +182,24 @@ int main()
                             while (1)
                             {
                                 GetLine(FileName, CurrentLine + LineOffset, Line);
+                                printf("get line %d\n", CurrentLine + LineOffset);
 
                                 char * FirstWord = malloc(256);
                                 FirstWord = strtok(Line, " ");
 
+                                LineOffset++;
                                 if (strcmp(FirstWord, "dir") == 0)
                                 {
                                     FirstWord = strtok(NULL, " ");
 
                                     struct Dir * TempDirectory = malloc(sizeof(struct Dir));
 
-                                    TempDirectory->Name = FirstWord;
+                                    TempDirectory->Name = RemoveLastChar(FirstWord);
                                     TempDirectory->Parent = CurrentDirectory;
 
                                     TempChildren[i] = TempDirectory;
                                     break;
                                 }
-                                else
-                                    LineOffset++;
                             }
                         }
 
@@ -178,11 +212,11 @@ int main()
             }
         }
 
-        if (CurrentLine == 6)
+        if (CurrentLine == 13)
             break;
 
         CurrentLine++;
     }
 
-    // PrintDir(CurrentDirectory);
+    PrintDir(&Root);
 }
